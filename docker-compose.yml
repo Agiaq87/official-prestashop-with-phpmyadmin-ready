@@ -1,0 +1,57 @@
+services:
+  mysql:
+    container_name: some-mysql
+    image: mysql:5.7
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: prestashop
+    networks:
+      - prestashop_network
+    volumes:
+      - dbdata:/var/lib/mysql
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    networks:
+      - prestashop_network
+    depends_on:
+      - mysql
+    ports:
+      - 8081:80
+    links:
+      - mysql:db
+    environment:
+      - PMA_HOST=some-mysql
+      - PMA_USER=root
+      - PMA_PASSWORD=admin
+  prestashop:
+    container_name: prestashop
+    image: prestashop/prestashop:latest
+    restart: unless-stopped
+    depends_on:
+      - mysql
+    ports:
+      - 8080:80
+    environment:
+      DB_SERVER: some-mysql
+      DB_NAME: prestashop
+      DB_USER: root
+      DB_PASSWD: admin
+      PS_FOLDER_ADMIN: admin4577
+      PS_FOLDER_INSTALL: install4577
+    networks:
+      - prestashop_network
+    volumes:
+      - type: bind
+        source: ./modules/carforagest # local path to the module
+        target: /var/www/html/modules/carforagest # path to be mounted in the container
+      - type: bind
+        source: ./modules/carforastore # local path to the module
+        target: /var/www/html/modules/carforastore # path to be mounted in the container
+      - psdata:/var/www/html
+networks:
+  prestashop_network:
+volumes:
+  psdata:
+  dbdata:
