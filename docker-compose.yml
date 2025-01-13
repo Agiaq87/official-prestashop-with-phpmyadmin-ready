@@ -66,6 +66,9 @@ services:
       - type: bind
         source: ./carforaclick_docker
         target: /var/www/html
+      - type: bind
+        source: ./xdebug.ini
+        target: /usr/local/etc/php/conf.d/xdebug.ini
 #      - psdata:/var/www/html
 networks:
   prestashop_network:
