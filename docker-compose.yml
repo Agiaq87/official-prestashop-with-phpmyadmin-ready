@@ -41,20 +41,34 @@ services:
       PS_FOLDER_ADMIN: admin4577
       PS_FOLDER_INSTALL: install4577
       PS_INSTALL_AUTO: 0
+      PS_DOMAIN: localhost:8080
       PS_DEV_MODE: 1
       PS_LANGUAGE: it
+      ADMIN_MAIL: agiaquinto87@gmail.com
+      ADMIN_PASSWD: ciao
+      PHP_XDEBUG_ENABLED: 1
+      XDEBUG_CONFIG: "client_host=host.docker.internal start_with_request=yes"
+      PHP_IDE_CONFIG: "serverName=prestashop"
+    extra_hosts:  # correzione: era 'extra_host'
+      - "host.docker.internal:host-gateway"
     networks:
       - prestashop_network
     volumes:
+#      - type: bind
+#        source: ./modules/carforagest # local path to the module
+#        target: /var/www/html/modules/carforagest # path to be mounted in the container
+#      - type: bind
+#        source: ./modules/carforastore # local path to the module
+#        target: /var/www/html/modules/carforastore # path to be mounted in the container
+#      - type: bind
+#        source: ./themes/carforaclick
+#        target: /var/www/html/themes/carforaclick
       - type: bind
-        source: ./modules/your-module # local path to the module
-        target: /var/www/html/modules/carforagest # path to be mounted in the container
-      - type: bind
-        source: ./themes/your-theme
-        target: /var/www/html/themes/carforaclick
-      - psdata:/var/www/html
+        source: ./carforaclick_docker
+        target: /var/www/html
+#      - psdata:/var/www/html
 networks:
   prestashop_network:
 volumes:
-  psdata:
+#  psdata:
   dbdata:
