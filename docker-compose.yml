@@ -28,6 +28,7 @@ services:
   prestashop:
     container_name: prestashop
     image: prestashop/prestashop:latest
+    build: .
     restart: unless-stopped
     depends_on:
       - mysql
